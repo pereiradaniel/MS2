@@ -42,15 +42,28 @@ namespace sdds {
 
 	void Parking::parkVehicle() {
 		// run the vehicle menu save the user's choice
-		// print 'Parking Car' (if choice 1)
-		// print 'Parking Motorcycle' (if choice 2)
-		// print 'Cancelled parking' (if choice 3)
+		int selection = 0;
+		m_vehicleMenu.display();
+		if (!isEmpty()) {
+			cin >> selection;
+
+			switch (selection) {
+			case 1:
+				// print 'Parking Car' (if choice 1)
+				cout << "Parking Car" << endl;
+			case 2:
+				// print 'Parking Motorcycle' (if choice 2)
+				cout << "Parking Motorcycle" << endl;
+			case 3:
+				// print 'Cancelled parking' (if choice 3)
+				cout << "Cancelled parking" << endl;
+			}
+		}
 	}
 
 	void Parking::returnVehicle() {
 		// message + EOL
 		cout << "Returning Vehicle" << endl;
-
 	}
 
 	void Parking::listParkedVehicles() {
@@ -66,21 +79,71 @@ namespace sdds {
 	
 	bool Parking::exitParkingApp() {
 		// call confirmed() function from Utils module
-		// if it returns true, print 'Exiting program!' + EOLD and return true
+		bool result = Utils::confirmed("terminate the program");
+		// if it returns true, print 'Exiting program!' + EOL and return true
+		if (result == true) {
+			cout << "Exiting program!" << endl;
+		}
 		// otherwise return false
+		return result;
 	}
 
 	void Parking::parkingStatus() const {
 		// message + EOL
-
+		cout << "****** Seneca Valet Parking ******" << endl;
 	}
 
-	//Parking::Parking(const Parking&) {
-	//	save();
-	//	delete[] m_datafile;
-	//	m_datafile = nullptr;
-	//	delete[] m_parkingMenu;
-	//	m_parkingMenu = nullptr;
-	//};
+	Parking::~Parking() {
+		save();
+		setEmpty();
+	}
 
+	bool Parking::load() {
+		if (!isEmpty())
+			cout << "loading data from " << m_datafile << endl;
+		return (!isEmpty());
+	}
+
+	void Parking::save() {
+		if (!isEmpty())
+			cout << "Saving data into " << m_datafile << endl;
+	}
+
+	bool Parking::isEmpty() const {
+		return m_datafile == nullptr;
+	}
+
+	void Parking::setEmpty() {
+		delete[] m_datafile;
+		m_datafile = nullptr;
+	}
+
+	int Parking::run() {
+		bool done = false;
+		int selection = 0;
+		while (!isEmpty() && !done) {
+			// parking status mesage
+			parkingStatus();
+			// run parking menu save the result in selection variable
+			m_parkingMenu.display();
+			cin >> selection;
+			// depending on selection:  part or return or list or clsoe or exit
+			// when you call the last two save the result in done variable
+			switch (selection) {
+			case 1:
+				parkVehicle();
+			case 2:
+				returnVehicle();
+			case 3:
+				listParkedVehicles();
+			case 4:
+				done = closeParking();
+				break;
+			case 5:
+				done = exitParkingApp();
+				break;
+			}
+		}
+		return selection;
+	}
 }
