@@ -1,22 +1,23 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstring>
+#include <cctype>
 using namespace std;
 #include "Utils.h"
 
 namespace sdds {
-    void Utils::read(int& val, int min, int max, const char* ErrorMess) {
+    void Utils::read(int& val, int min, int max, const char* ErrorMess, istream& is) {
         bool ok;
         char newline;
         const char* orgMes = ErrorMess;
         const char invalidInt[] = "Invalid Integer, try again: ";
         do {
-            cin >> val;
-            newline = cin.get();
-            if (cin.fail() || newline != '\n') {
+            is >> val;
+            newline = is.get();
+            if (is.fail() || newline != '\n') {
                 ok = false;
-                cin.clear();
-                cin.ignore(1000, '\n');
+                is.clear();
+                is.ignore(1000, '\n');
                 ErrorMess = invalidInt;
             }
             else {
@@ -28,57 +29,63 @@ namespace sdds {
     void Utils::read(
         long long& val,
         long long min,
-        long long max, const char* ErrorMess) {
+        long long max, const char* ErrorMess, istream& is) {
         bool ok;
         char newline;
         do {
-            cin >> val;
-            newline = cin.get();
-            if (cin.fail() || newline != '\n') {
+            is >> val;
+            newline = is.get();
+            if (is.fail() || newline != '\n') {
                 ok = false;
-                cin.clear();
-                cin.ignore(1000, '\n');
+                is.clear();
+                is.ignore(1000, '\n');
             }
             else {
                 ok = val <= max && val >= min;
             }
         } while (!ok && cout << ErrorMess);
     }
-    void Utils::read(char* str, int len, const char* errorMessage) {
+    void Utils::read(char* str, int len, const char* errorMessage, istream& is) {
         bool ok;
         do {
             ok = true;
-            cin.getline(str, std::streamsize(len) + 1, '\n');
-            if (cin.fail()) {
-                cin.clear();
-                cin.ignore(1000, '\n');
+            is.getline(str, std::streamsize(len) + 1, '\n');
+            if (is.fail()) {
+                is.clear();
+                is.ignore(1000, '\n');
                 ok = false;
             }
         } while (!ok && cout << errorMessage);
     }
-    void Utils::read(char* str, int minlen, int maxlen, const char* errorMessage) {
+    void Utils::read(char* str, int minlen, int maxlen, const char* errorMessage, istream& is) {
         do {
             read(str, maxlen, errorMessage);
         } while (strlen(str) < size_t(minlen) && cout << errorMessage);
     }
-    bool Utils::yes() {
+    bool Utils::yes(istream& is) {
         char res;
         char newline;
         do {
-            res = cin.get();
-            newline = cin.get();
+            res = is.get();
+            newline = is.get();
             if (newline != '\n') {
-                cin.ignore(1000, '\n');
+                is.ignore(1000, '\n');
                 res = 'x';
             }
         } while (res != 'y' && res != 'Y' && res != 'n' && res != 'N'
             && cout << "Invalid response, only (Y)es or (N)o are acceptable, retry: ");
         return res == 'y' || res == 'Y';
     }
-    bool Utils::confirmed(const char* action) {
+    bool Utils::confirmed(const char* action, istream& is) {
         cout << "This will " << action << '!' << endl;
         cout << "Are you sure? (Y)es/(N)o: ";
         return yes();
+    }
+    void Utils::toUpper(char* str) {
+        while (*str) {
+            *str = toupper(*str);
+            str++;
+        }
     }
     char* Utils::read(istream& is) {
         char* data = new char[ReadBufferSize];
@@ -87,18 +94,19 @@ namespace sdds {
         bool done;
         do {
             done = true;
-            cin.getline(str, ReadBufferSize, '\n');
-            if (cin.fail()) {
+            is.getline(str, ReadBufferSize, '\n');
+            if (is.fail()) {
                 noOfBuffers++;
                 char* temp = new char[(ReadBufferSize - 1) * noOfBuffers + 1];
                 strcpy(temp, data);
                 delete[] data;
                 data = temp;
                 str = data + (ReadBufferSize - 1) * (noOfBuffers - 1);
-                cin.clear();
+                is.clear();
                 done = false;
             }
         } while (!done);
         return data;
     }
+
 }
