@@ -146,7 +146,9 @@ namespace sdds {
 			}
 			else if (selection == 5) {
 				done = exitParkingApp();
-				break;
+				if (done) {
+					break;
+				}
 			}
 		}
 		return selection;
