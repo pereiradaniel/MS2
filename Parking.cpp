@@ -49,10 +49,30 @@ namespace sdds {
 
 	void Parking::returnVehicle() {
 		// message + EOL
+		cout << "Returning Vehicle" << endl;
+
 	}
 
 	void Parking::listParkedVehicles() {
 		// message + EOL
+		cout << "Listing Parked Vehicles" << endl;
+	}
+	
+	bool Parking::closeParking() {
+		// message + EOL
+		cout << "Closing Parking" << endl;
+		return true;
+	}
+	
+	bool Parking::exitParkingApp() {
+		// call confirmed() function from Utils module
+		// if it returns true, print 'Exiting program!' + EOLD and return true
+		// otherwise return false
+	}
+
+	void Parking::parkingStatus() const {
+		// message + EOL
+
 	}
 
 	//Parking::Parking(const Parking&) {
