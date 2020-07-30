@@ -12,7 +12,7 @@ namespace sdds {
 		m_parkingMenu("Parking Menu, select an action:"),
 		m_vehicleMenu("select type of the vehicle:", 1) {
 		// if parameter datafile is good
-		if (datafile != nullptr) {
+		if (datafile != nullptr && datafile [0] != '\0') {
 			// allocate memory and copy string
 			m_datafile = new char[strlen(datafile) + 1];
 			strcpy(m_datafile, datafile);
@@ -70,13 +70,13 @@ namespace sdds {
 		// message + EOL
 		cout << "Listing Parked Vehicles" << endl;
 	}
-	
+
 	bool Parking::closeParking() {
 		// message + EOL
 		cout << "Closing Parking" << endl;
 		return true;
 	}
-	
+
 	bool Parking::exitParkingApp() {
 		// call confirmed() function from Utils module
 		bool result = Utils::confirmed("terminate the program");
@@ -129,20 +129,22 @@ namespace sdds {
 			cin >> selection;
 			// depending on selection:  part or return or list or clsoe or exit
 			// when you call the last two save the result in done variable
-			switch (selection) {
-			case 1:
+			if (selection == 1) {
 				parkVehicle();
-				break;
-			case 2:
+			}
+			else if (selection == 2) {
 				returnVehicle();
-				break;
-			case 3:
+			}
+			else if (selection == 3) {
 				listParkedVehicles();
-				break;
-			case 4:
+			}
+			else if (selection == 4) {
 				done = closeParking();
-				break;
-			case 5:
+				if (done) {
+					break;
+				}
+			}
+			else if (selection == 5) {
 				done = exitParkingApp();
 				break;
 			}
