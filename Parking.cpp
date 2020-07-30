@@ -49,14 +49,14 @@ namespace sdds {
 
 			switch (selection) {
 			case 1:
-				// print 'Parking Car' (if choice 1)
 				cout << "Parking Car" << endl;
+				break;
 			case 2:
-				// print 'Parking Motorcycle' (if choice 2)
 				cout << "Parking Motorcycle" << endl;
+				break;
 			case 3:
-				// print 'Cancelled parking' (if choice 3)
 				cout << "Cancelled parking" << endl;
+				break;
 			}
 		}
 	}
@@ -132,10 +132,13 @@ namespace sdds {
 			switch (selection) {
 			case 1:
 				parkVehicle();
+				break;
 			case 2:
 				returnVehicle();
+				break;
 			case 3:
 				listParkedVehicles();
+				break;
 			case 4:
 				done = closeParking();
 				break;
